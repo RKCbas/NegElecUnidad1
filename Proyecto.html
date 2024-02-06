@@ -47,8 +47,8 @@
                 <input type="text" id="nombre" class="form-control" placeholder="Ingrese el nombre del producto" required>
             </div>
             <div class="form-group">
-                <label for="descripcion">Descripción del Producto:</label>
-                <textarea id="descripcion" class="form-control" rows="3" placeholder="Ingrese la descripción del producto" required></textarea>
+                <label for="categoria">Categoria del Producto:</label>
+                <textarea id="categoria" class="form-control" rows="3" placeholder="Ingrese la categoria del producto" required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Crear Producto</button>
         </form>
@@ -59,7 +59,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Nombre</th>
-                    <th>Descripción</th>
+                    <th>Categoria</th>
                 </tr>
             </thead>
             <tbody id="productBody">
@@ -78,7 +78,7 @@
                 event.preventDefault();
 
                 const nombre = document.getElementById('nombre').value;
-                const descripcion = document.getElementById('descripcion').value;
+                const categoria = document.getElementById('categoria').value;
 
                 const newRow = document.createElement('tr');
                 productId++; 
@@ -86,13 +86,13 @@
                 newRow.innerHTML = `
                     <td>${productId}</td>
                     <td>${nombre}</td>
-                    <td>${descripcion}</td>
+                    <td>${categoria}</td>
                 `;
 
                 productTableBody.appendChild(newRow);
 
                 document.getElementById('nombre').value = '';
-                document.getElementById('descripcion').value = '';
+                document.getElementById('categoria').value = '';
             });
         });
     </script>
