@@ -61,8 +61,7 @@
       </div>
       <div class="form-group">
         <label for="categoria">Categoria del Producto:</label>
-        <textarea id="categoria" class="form-control" rows="3" placeholder="Ingrese la categoria del producto"
-          required></textarea>
+        <input id="categoria" class="form-control" placeholder="Ingrese la categoria del producto" required>
       </div>
       <button type="submit" class="btn btn-primary">Crear Producto</button>
     </form>
@@ -99,11 +98,14 @@
         productId++;
 
         newRow.innerHTML = `
-                    <td>${productId}</td>
-                    <td>${nombre}</td>
-                    <td>${categoria}</td>
-                    <td><button class="delete-btn" data-id="${productId}">Eliminar</button></td>
-                `;
+          <td>${productId}</td>
+          <td class="productName">${nombre}</td>
+          <td class="productCategory">${categoria}</td>
+          <td>
+            <button class="edit-btn btn btn-warning">Editar</button>
+            <button class="delete-btn btn btn-danger">Eliminar</button>
+          </td>
+        `;
 
         productTableBody.appendChild(newRow);
 
@@ -114,6 +116,22 @@
         const deleteBtn = newRow.querySelector('.delete-btn');
         deleteBtn.addEventListener('click', function () {
           newRow.remove();
+        });
+
+        // Add event listener to the edit button
+        const editBtn = newRow.querySelector('.edit-btn');
+        const productNameElement = newRow.querySelector('.productName');
+        const productCategoryElement = newRow.querySelector('.productCategory');
+
+        editBtn.addEventListener('click', function () {
+          var updatedName = prompt('Editar el nombre del producto:', productNameElement.textContent);
+          if (updatedName !== null) {
+            productNameElement.textContent = updatedName;
+          }
+          var updateCategory = prompt('Editar la categoria del producto:', productCategoryElement.textContent);
+          if (updateCategory !== null) {
+            productCategoryElement.textContent = updateCategory;
+          }
         });
       });
     });
