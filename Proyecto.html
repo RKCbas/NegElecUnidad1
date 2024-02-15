@@ -40,12 +40,10 @@
       color: white;
     }
 
-    .delete-btn {
+    .delete-btn,
+    .edit-btn {
       color: #ffffff;
-      background-color: #dc3545;
       border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
       cursor: pointer;
     }
   </style>
@@ -56,13 +54,23 @@
     <h1 class="mt-4">Crear y Mostrar Productos</h1>
     <form id="productForm" class="mt-4">
       <div class="form-group">
-        <label for="nombre">Nombre del Producto:</label>
-        <input type="text" id="nombre" class="form-control" placeholder="Ingrese el nombre del producto" required>
+        <label for="Nombre">Nombre del Producto:</label>
+        <input type="text" id="Nombre" class="form-control" placeholder="Ingrese el nombre del producto" required>
       </div>
       <div class="form-group">
-        <label for="categoria">Categoria del Producto:</label>
-        <input id="categoria" class="form-control" placeholder="Ingrese la categoria del producto" required>
+        <label for="Descripcion">Descripción:</label>
+        <input id="Descripcion" class="form-control" placeholder="Ingrese la descripción del producto" required>
       </div>
+      <div class="form-group">
+        <label for="Precio">Precio:</label>
+        <input type="number" id="Precio" class="form-control" placeholder="Ingrese el precio del producto" required>
+      </div>
+      <div class="form-group">
+        <label for="Categoria">Categoría del Producto:</label>
+        <input id="Categoria" class="form-control" placeholder="Ingrese la categoría del producto" required>
+      </div>
+
+      
       <button type="submit" class="btn btn-primary">Crear Producto</button>
     </form>
 
@@ -72,13 +80,53 @@
         <tr>
           <th>ID</th>
           <th>Nombre</th>
-          <th>Categoria</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Categoría</th>
+          <th>Imagen</th>
           <th>Acción</th>
         </tr>
       </thead>
       <tbody id="productBody">
       </tbody>
     </table>
+  </div>
+
+  <!-- Editar -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel" style="color:steelblue">Editar Producto</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="editNombre" style="color: black;">Nombre:</label>
+            <input type="text" id="editNombre" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="editDescripcion" style="color: black;">Descripción:</label>
+            <input id="editDescripcion" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="editPrecio" style="color: black;">Precio:</label>
+            <input type="number" id="editPrecio" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="editCategoria" style="color: black;">Categoría:</label>
+            <input id="editCategoria" class="form-control" required>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="saveChangesBtn">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -91,8 +139,10 @@
       productForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
-        const nombre = document.getElementById('nombre').value;
-        const categoria = document.getElementById('categoria').value;
+        const nombre = document.getElementById('Nombre').value;
+        const descripcion = document.getElementById('Descripcion').value;
+        const precio = document.getElementById('Precio').value;
+        const categoria = document.getElementById('Categoria').value;
 
         const newRow = document.createElement('tr');
         productId++;
@@ -100,7 +150,10 @@
         newRow.innerHTML = `
           <td>${productId}</td>
           <td class="productName">${nombre}</td>
+          <td class="productDescription">${descripcion}</td>
+          <td class="productPrice">${precio}</td>
           <td class="productCategory">${categoria}</td>
+          <td><!-- Agregar código para la columna de imagen --></td>
           <td>
             <button class="edit-btn btn btn-warning">Editar</button>
             <button class="delete-btn btn btn-danger">Eliminar</button>
@@ -109,30 +162,46 @@
 
         productTableBody.appendChild(newRow);
 
-        document.getElementById('nombre').value = '';
-        document.getElementById('categoria').value = '';
+        document.getElementById('Nombre').value = '';
+        document.getElementById('Descripcion').value = '';
+        document.getElementById('Precio').value = '';
+        document.getElementById('Categoria').value = '';
 
-        // Add event listener to the delete button
+  
         const deleteBtn = newRow.querySelector('.delete-btn');
         deleteBtn.addEventListener('click', function () {
           newRow.remove();
         });
 
-        // Add event listener to the edit button
+    
         const editBtn = newRow.querySelector('.edit-btn');
         const productNameElement = newRow.querySelector('.productName');
+        const productDescriptionElement = newRow.querySelector('.productDescription');
+        const productPriceElement = newRow.querySelector('.productPrice');
         const productCategoryElement = newRow.querySelector('.productCategory');
 
         editBtn.addEventListener('click', function () {
-          var updatedName = prompt('Editar el nombre del producto:', productNameElement.textContent);
-          if (updatedName !== null) {
-            productNameElement.textContent = updatedName;
-          }
-          var updateCategory = prompt('Editar la categoria del producto:', productCategoryElement.textContent);
-          if (updateCategory !== null) {
-            productCategoryElement.textContent = updateCategory;
-          }
+
+          document.getElementById('editNombre').value = productNameElement.textContent;
+          document.getElementById('editDescripcion').value = productDescriptionElement.textContent;
+          document.getElementById('editPrecio').value = productPriceElement.textContent;
+          document.getElementById('editCategoria').value = productCategoryElement.textContent;
+
+
+          $('#editModal').modal('show');
         });
+      });
+
+
+      document.getElementById('saveChangesBtn').addEventListener('click', function () {
+
+        productNameElement.textContent = document.getElementById('editNombre').value;
+        productDescriptionElement.textContent = document.getElementById('editDescripcion').value;
+        productPriceElement.textContent = document.getElementById('editPrecio').value;
+        productCategoryElement.textContent = document.getElementById('editCategoria').value;
+
+
+        $('#editModal').modal('hide');
       });
     });
   </script>
