@@ -70,7 +70,7 @@
         <input id="Categoria" class="form-control" placeholder="Ingrese la categoría del producto" required>
       </div>
 
-      
+
       <button type="submit" class="btn btn-primary">Crear Producto</button>
     </form>
 
@@ -131,79 +131,78 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const productForm = document.getElementById('productForm');
-      const productTableBody = document.getElementById('productBody');
-
-      let productId = 0;
-
-      productForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        const nombre = document.getElementById('Nombre').value;
-        const descripcion = document.getElementById('Descripcion').value;
-        const precio = document.getElementById('Precio').value;
-        const categoria = document.getElementById('Categoria').value;
-
-        const newRow = document.createElement('tr');
-        productId++;
-
-        newRow.innerHTML = `
-          <td>${productId}</td>
-          <td class="productName">${nombre}</td>
-          <td class="productDescription">${descripcion}</td>
-          <td class="productPrice">${precio}</td>
-          <td class="productCategory">${categoria}</td>
-          <td><!-- Agregar código para la columna de imagen --></td>
-          <td>
-            <button class="edit-btn btn btn-warning">Editar</button>
-            <button class="delete-btn btn btn-danger">Eliminar</button>
-          </td>
-        `;
-
-        productTableBody.appendChild(newRow);
-
-        document.getElementById('Nombre').value = '';
-        document.getElementById('Descripcion').value = '';
-        document.getElementById('Precio').value = '';
-        document.getElementById('Categoria').value = '';
-
-  
-        const deleteBtn = newRow.querySelector('.delete-btn');
-        deleteBtn.addEventListener('click', function () {
-          newRow.remove();
+        const productForm = document.getElementById('productForm');
+        const productTableBody = document.getElementById('productBody');
+      
+        let productId = 0;
+        let productNameElement;
+        let productDescriptionElement;
+        let productPriceElement;
+        let productCategoryElement;
+      
+        productForm.addEventListener('submit', function (event) {
+          event.preventDefault();
+      
+          const nombre = document.getElementById('Nombre').value;
+          const descripcion = document.getElementById('Descripcion').value;
+          const precio = document.getElementById('Precio').value;
+          const categoria = document.getElementById('Categoria').value;
+      
+          const newRow = document.createElement('tr');
+          productId++;
+      
+          newRow.innerHTML = `
+            <td>${productId}</td>
+            <td class="productName">${nombre}</td>
+            <td class="productDescription">${descripcion}</td>
+            <td class="productPrice">${precio}</td>
+            <td class="productCategory">${categoria}</td>
+            <td><!-- Agregar código para la columna de imagen --></td>
+            <td>
+              <button class="edit-btn btn btn-warning">Editar</button>
+              <button class="delete-btn btn btn-danger">Eliminar</button>
+            </td>
+          `;
+      
+          productTableBody.appendChild(newRow);
+      
+          document.getElementById('Nombre').value = '';
+          document.getElementById('Descripcion').value = '';
+          document.getElementById('Precio').value = '';
+          document.getElementById('Categoria').value = '';
+      
+          const deleteBtn = newRow.querySelector('.delete-btn');
+          deleteBtn.addEventListener('click', function () {
+            newRow.remove();
+          });
+      
+          const editBtn = newRow.querySelector('.edit-btn');
+          productNameElement = newRow.querySelector('.productName');
+          productDescriptionElement = newRow.querySelector('.productDescription');
+          productPriceElement = newRow.querySelector('.productPrice');
+          productCategoryElement = newRow.querySelector('.productCategory');
+      
+          editBtn.addEventListener('click', function () {
+            document.getElementById('editNombre').value = productNameElement.textContent;
+            document.getElementById('editDescripcion').value = productDescriptionElement.textContent;
+            document.getElementById('editPrecio').value = productPriceElement.textContent;
+            document.getElementById('editCategoria').value = productCategoryElement.textContent;
+      
+            $('#editModal').modal('show');
+          });
         });
-
-    
-        const editBtn = newRow.querySelector('.edit-btn');
-        const productNameElement = newRow.querySelector('.productName');
-        const productDescriptionElement = newRow.querySelector('.productDescription');
-        const productPriceElement = newRow.querySelector('.productPrice');
-        const productCategoryElement = newRow.querySelector('.productCategory');
-
-        editBtn.addEventListener('click', function () {
-
-          document.getElementById('editNombre').value = productNameElement.textContent;
-          document.getElementById('editDescripcion').value = productDescriptionElement.textContent;
-          document.getElementById('editPrecio').value = productPriceElement.textContent;
-          document.getElementById('editCategoria').value = productCategoryElement.textContent;
-
-
-          $('#editModal').modal('show');
+      
+        document.getElementById('saveChangesBtn').addEventListener('click', function () {
+          if (productNameElement && productDescriptionElement && productPriceElement && productCategoryElement) {
+            productNameElement.textContent = document.getElementById('editNombre').value;
+            productDescriptionElement.textContent = document.getElementById('editDescripcion').value;
+            productPriceElement.textContent = document.getElementById('editPrecio').value;
+            productCategoryElement.textContent = document.getElementById('editCategoria').value;
+          }
+      
+          $('#editModal').modal('hide');
         });
       });
-
-
-      document.getElementById('saveChangesBtn').addEventListener('click', function () {
-
-        productNameElement.textContent = document.getElementById('editNombre').value;
-        productDescriptionElement.textContent = document.getElementById('editDescripcion').value;
-        productPriceElement.textContent = document.getElementById('editPrecio').value;
-        productCategoryElement.textContent = document.getElementById('editCategoria').value;
-
-
-        $('#editModal').modal('hide');
-      });
-    });
   </script>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -212,3 +211,4 @@
 </body>
 
 </html>
+
