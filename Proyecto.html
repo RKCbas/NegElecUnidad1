@@ -51,7 +51,7 @@
 
 <body>
   <div class="container">
-    <h1 class="mt-4">Crear y Mostrar Productos</h1>
+    <h1 class="mt-4"> Productos</h1>
     <form id="productForm" class="mt-4">
       <div class="form-group">
         <label for="Nombre">Nombre del Producto:</label>
@@ -69,6 +69,11 @@
         <label for="Categoria">Categoría del Producto:</label>
         <input id="Categoria" class="form-control" placeholder="Ingrese la categoría del producto" required>
       </div>
+      <div class="form-group">
+        <label for="ImagenUrl">URL de la Imagen:</label>
+        <input type="text" id="ImagenUrl" class="form-control" placeholder="Ingrese la URL de la imagen del producto" required>
+    </div>
+    
 
 
       <button type="submit" class="btn btn-primary">Crear Producto</button>
@@ -119,7 +124,11 @@
             <label for="editCategoria" style="color: black;">Categoría:</label>
             <input id="editCategoria" class="form-control" required>
           </div>
-
+          <div class="form-group">
+            <label for="editImagenUrl" style="color: black;">URL de la Imagen:</label>
+            <input type="text" id="editImagenUrl" class="form-control" required>
+            <img id="editPreviewImage" src="" alt="Imagen del Producto" style="max-width: 100px;">
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -147,7 +156,7 @@
           const descripcion = document.getElementById('Descripcion').value;
           const precio = document.getElementById('Precio').value;
           const categoria = document.getElementById('Categoria').value;
-      
+          const imagenUrl = document.getElementById('ImagenUrl').value;
           const newRow = document.createElement('tr');
           productId++;
       
@@ -157,8 +166,8 @@
             <td class="productDescription">${descripcion}</td>
             <td class="productPrice">${precio}</td>
             <td class="productCategory">${categoria}</td>
-            <td><!-- Agregar código para la columna de imagen --></td>
-            <td>
+            <td><img src="${imagenUrl}" alt="Imagen del Producto" style="max-width: 100px;"></td>
+                    <td>
               <button class="edit-btn btn btn-warning">Editar</button>
               <button class="delete-btn btn btn-danger">Eliminar</button>
             </td>
@@ -170,6 +179,8 @@
           document.getElementById('Descripcion').value = '';
           document.getElementById('Precio').value = '';
           document.getElementById('Categoria').value = '';
+          document.getElementById('ImagenUrl').value = ''; // Limpiar el campo de la URL de la imagen
+
       
           const deleteBtn = newRow.querySelector('.delete-btn');
           deleteBtn.addEventListener('click', function () {
@@ -201,12 +212,16 @@
           productDescriptionElement = newRow.querySelector('.productDescription');
           productPriceElement = newRow.querySelector('.productPrice');
           productCategoryElement = newRow.querySelector('.productCategory');
+          productImageElement = newRow.querySelector('img');
+
       
           editBtn.addEventListener('click', function () {
             document.getElementById('editNombre').value = productNameElement.textContent;
             document.getElementById('editDescripcion').value = productDescriptionElement.textContent;
             document.getElementById('editPrecio').value = productPriceElement.textContent;
             document.getElementById('editCategoria').value = productCategoryElement.textContent;
+            document.getElementById('editImagenUrl').value = newRow.querySelector('img').src;
+     
       
             $('#editModal').modal('show');
           });
@@ -218,6 +233,8 @@
             productDescriptionElement.textContent = document.getElementById('editDescripcion').value;
             productPriceElement.textContent = document.getElementById('editPrecio').value;
             productCategoryElement.textContent = document.getElementById('editCategoria').value;
+            productImageElement.src = document.getElementById('editImagenUrl').value;
+
           }
       
           $('#editModal').modal('hide');
