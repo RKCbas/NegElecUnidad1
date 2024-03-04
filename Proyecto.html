@@ -46,19 +46,19 @@
       border: none;
       cursor: pointer;
     }
+
     .custom-btn {
-    background-color:  #32485d; 
-    color: white; 
-    padding: 10px 20px; 
-    border-radius: 5px; 
-    border: none; 
-    cursor: pointer; 
-}
+      background-color: #32485d;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+    }
 
-.custom-btn:hover {
-    background-color: #f23818; 
-}
-
+    .custom-btn:hover {
+      background-color: #f23818;
+    }
   </style>
 </head>
 
@@ -76,7 +76,7 @@
       </div>
       <div class="form-group">
         <label for="Precio">Precio:</label>
-        <input type="number" id="Precio" class="form-control" placeholder="Ingrese el precio del producto" required>
+        <input type="double" id="Precio" class="form-control" placeholder="Ingrese el precio del producto" required>
       </div>
       <div class="form-group">
         <label for="Categoria">Categoría del Producto:</label>
@@ -84,11 +84,12 @@
       </div>
       <div class="form-group">
         <label for="ImagenUrl">URL de la Imagen:</label>
-        <input type="text" id="ImagenUrl" class="form-control" placeholder="Ingrese la URL de la imagen del producto" required>
-    </div>
-    <div class="text-center">
-    <button type="submit" class="btn btn-primary custom-btn">Crear Producto</button>
-  </div>
+        <input type="text" id="ImagenUrl" class="form-control" placeholder="Ingrese la URL de la imagen del producto"
+          required>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary custom-btn">Crear Producto</button>
+      </div>
     </form>
 
     <h2 class="mt-4">Tabla de productos</h2>
@@ -110,7 +111,8 @@
   </div>
 
   <!-- Editar -->
-  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -152,27 +154,32 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const productForm = document.getElementById('productForm');
-        const productTableBody = document.getElementById('productBody');
-      
-        let productId = 0;
-        let productNameElement;
-        let productDescriptionElement;
-        let productPriceElement;
-        let productCategoryElement;
-      
-        productForm.addEventListener('submit', function (event) {
-          event.preventDefault();
-      
-          const nombre = document.getElementById('Nombre').value;
-          const descripcion = document.getElementById('Descripcion').value;
-          const precio = document.getElementById('Precio').value;
-          const categoria = document.getElementById('Categoria').value;
-          const imagenUrl = document.getElementById('ImagenUrl').value;
-          const newRow = document.createElement('tr');
-          productId++;
-      
-          newRow.innerHTML = `
+      const productForm = document.getElementById('productForm');
+      const productTableBody = document.getElementById('productBody');
+
+      let productId = 0;
+      let productNameElement;
+      let productDescriptionElement;
+      let productPriceElement;
+      let productCategoryElement;
+
+      productForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const nombre = document.getElementById('Nombre').value;
+        const descripcion = document.getElementById('Descripcion').value;
+        const precio = parseFloat(document.getElementById('Precio').value);
+        const categoria = document.getElementById('Categoria').value;
+        const imagenUrl = document.getElementById('ImagenUrl').value;
+        const newRow = document.createElement('tr');
+        productId++;
+
+        if (isNaN(precio) || precio <= .05) {
+          alert('porfavor ingresa un precio valido');
+          return;
+        }
+
+        newRow.innerHTML = `
             <td>${productId}</td>
             <td class="productName">${nombre}</td>
             <td class="productDescription">${descripcion}</td>
@@ -184,74 +191,74 @@
               <button class="delete-btn btn btn-danger">Eliminar</button>
             </td>
           `;
-      
-          productTableBody.appendChild(newRow);
-      
-          document.getElementById('Nombre').value = '';
-          document.getElementById('Descripcion').value = '';
-          document.getElementById('Precio').value = '';
-          document.getElementById('Categoria').value = '';
-          document.getElementById('ImagenUrl').value = ''; 
 
-      
-          const deleteBtn = newRow.querySelector('.delete-btn');
-          deleteBtn.addEventListener('click', function () {
-            Swal.fire({
-              title: '¿Estás seguro?',
-              text: '¿Quieres eliminar este producto?',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Sí, eliminar',
-              cancelButtonText: 'Cancelar'
-            }).then((result) => {
-              if (result.isConfirmed) {
-                newRow.remove();
-                Swal.fire(
-                  'Eliminado',
-                  'El producto ha sido eliminado.',
-                  'success'
-                );
-              }
-            });
-          });
+        productTableBody.appendChild(newRow);
+
+        document.getElementById('Nombre').value = '';
+        document.getElementById('Descripcion').value = '';
+        document.getElementById('Precio').value = '';
+        document.getElementById('Categoria').value = '';
+        document.getElementById('ImagenUrl').value = '';
 
 
-      
-          const editBtn = newRow.querySelector('.edit-btn');
-          productNameElement = newRow.querySelector('.productName');
-          productDescriptionElement = newRow.querySelector('.productDescription');
-          productPriceElement = newRow.querySelector('.productPrice');
-          productCategoryElement = newRow.querySelector('.productCategory');
-          productImageElement = newRow.querySelector('img');
-
-      
-          editBtn.addEventListener('click', function () {
-            document.getElementById('editNombre').value = productNameElement.textContent;
-            document.getElementById('editDescripcion').value = productDescriptionElement.textContent;
-            document.getElementById('editPrecio').value = productPriceElement.textContent;
-            document.getElementById('editCategoria').value = productCategoryElement.textContent;
-            document.getElementById('editImagenUrl').value = newRow.querySelector('img').src;
-     
-      
-            $('#editModal').modal('show');
+        const deleteBtn = newRow.querySelector('.delete-btn');
+        deleteBtn.addEventListener('click', function () {
+          Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¿Quieres eliminar este producto?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              newRow.remove();
+              Swal.fire(
+                'Eliminado',
+                'El producto ha sido eliminado.',
+                'success'
+              );
+            }
           });
         });
-      
-        document.getElementById('saveChangesBtn').addEventListener('click', function () {
-          if (productNameElement && productDescriptionElement && productPriceElement && productCategoryElement) {
-            productNameElement.textContent = document.getElementById('editNombre').value;
-            productDescriptionElement.textContent = document.getElementById('editDescripcion').value;
-            productPriceElement.textContent = document.getElementById('editPrecio').value;
-            productCategoryElement.textContent = document.getElementById('editCategoria').value;
-            productImageElement.src = document.getElementById('editImagenUrl').value;
 
-          }
-      
-          $('#editModal').modal('hide');
+
+
+        const editBtn = newRow.querySelector('.edit-btn');
+        productNameElement = newRow.querySelector('.productName');
+        productDescriptionElement = newRow.querySelector('.productDescription');
+        productPriceElement = newRow.querySelector('.productPrice');
+        productCategoryElement = newRow.querySelector('.productCategory');
+        productImageElement = newRow.querySelector('img');
+
+
+        editBtn.addEventListener('click', function () {
+          document.getElementById('editNombre').value = productNameElement.textContent;
+          document.getElementById('editDescripcion').value = productDescriptionElement.textContent;
+          document.getElementById('editPrecio').value = productPriceElement.textContent;
+          document.getElementById('editCategoria').value = productCategoryElement.textContent;
+          document.getElementById('editImagenUrl').value = newRow.querySelector('img').src;
+
+
+          $('#editModal').modal('show');
         });
       });
+
+      document.getElementById('saveChangesBtn').addEventListener('click', function () {
+        if (productNameElement && productDescriptionElement && productPriceElement && productCategoryElement) {
+          productNameElement.textContent = document.getElementById('editNombre').value;
+          productDescriptionElement.textContent = document.getElementById('editDescripcion').value;
+          productPriceElement.textContent = document.getElementById('editPrecio').value;
+          productCategoryElement.textContent = document.getElementById('editCategoria').value;
+          productImageElement.src = document.getElementById('editImagenUrl').value;
+
+        }
+
+        $('#editModal').modal('hide');
+      });
+    });
   </script>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -262,4 +269,3 @@
 </body>
 
 </html>
-
