@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Proyecto</title>
-
+  
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
@@ -76,7 +76,8 @@
       </div>
       <div class="form-group">
         <label for="Precio">Precio:</label>
-        <input type="double" id="Precio" class="form-control" placeholder="Ingrese el precio del producto" required>
+        <input type="double" id="Precio" class="form-control" onkeypress="dec(event)"
+          placeholder="Ingrese el precio del producto" required>
       </div>
       <div class="form-group">
         <label for="Categoria">Categoría del Producto:</label>
@@ -132,7 +133,7 @@
           </div>
           <div class="form-group">
             <label for="editPrecio" style="color: black;">Precio:</label>
-            <input type="number" id="editPrecio" class="form-control" required>
+            <input type="number" id="editPrecio" class="form-control" onkeypress="" required>
           </div>
           <div class="form-group">
             <label for="editCategoria" style="color: black;">Categoría:</label>
@@ -153,6 +154,24 @@
   </div>
 
   <script>
+
+    function dec(evt) {
+      var charCode = (evt.which) ? evt.which : event.keyCode;
+      var inputValue = evt.target.value;
+
+      // Permite números, punto y retroceso (backspace)
+      if ((charCode >= 48 && charCode <= 57) || charCode === 46 || charCode === 8) {
+        // Verifica que solo haya un punto decimal
+        if (charCode === 46 && inputValue.indexOf('.') !== -1) {
+          evt.preventDefault();
+        }
+      } else {
+        // Si no es un número, cancela la entrada
+        evt.preventDefault();
+      }
+    }
+
+
     document.addEventListener('DOMContentLoaded', function () {
       const productForm = document.getElementById('productForm');
       const productTableBody = document.getElementById('productBody');
